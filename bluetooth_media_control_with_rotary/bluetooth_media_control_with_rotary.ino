@@ -12,7 +12,7 @@ int lastStateCLK;
 String currentDir = "";
 unsigned long lastButtonPress = 0;
 
-BleKeyboard bleKeyboard;
+BleKeyboard bleKeyboard("Shifter Pro", "Kaname", 69);
 ClickButton button1(SW, LOW, CLICKBTN_PULLUP);
 
 void setup() {
@@ -21,7 +21,7 @@ void setup() {
   pinMode(DT, INPUT);
   pinMode(SW, INPUT_PULLUP);
   //  pinMode(btn, INPUT_PULLUP);
-//  lastStateCLK = digitalRead(CLK);
+  //  lastStateCLK = digitalRead(CLK);
   button1.debounceTime   = 20;
   button1.multiclickTime = 700;
   button1.longClickTime  = 1000;
@@ -31,7 +31,7 @@ void setup() {
 }
 
 void loop() {
-  
+
   if (bleKeyboard.isConnected()) {
     button1.Update();
     rotaryEncoder(1);
@@ -65,29 +65,15 @@ void rotaryEncoder(int debugEn) {
   if (button1.clicks != 0) {
     if (button1.clicks == 1) {
       bleKeyboard.write(KEY_MEDIA_PLAY_PAUSE);
-      Serial.println("Btn clicks 1");
+      Serial.println("1 Click, Play Pause");
     }
     if (button1.clicks == 2) {
       bleKeyboard.write(KEY_MEDIA_NEXT_TRACK);
-      Serial.println("Btn clicks 2");
+      Serial.println("2 Clicks, Next Tract");
     }
     if (button1.clicks == 3) {
       bleKeyboard.write(KEY_MEDIA_PREVIOUS_TRACK);
-      Serial.println("Btn clicks 3");
+      Serial.println("3 Clicks, Previous Track");
     }
   }
-  
-//  int btnState = digitalRead(SW);
-//  if (btnState == LOW) {
-//    if (millis() - lastButtonPress > 50) {
-//      if (debugEn == 1) {
-//        bleKeyboard.write(KEY_MEDIA_PLAY_PAUSE);
-//        Serial.println("Button pressed!");
-//      }
-//    }
-//    lastButtonPress = millis();
-//  }
-
-  // Put in a slight delay to help debounce the reading
-//  delay(1);
 }
