@@ -23,7 +23,7 @@ void setup() {
   //  pinMode(btn, INPUT_PULLUP);
   //  lastStateCLK = digitalRead(CLK);
   button1.debounceTime   = 20;
-  button1.multiclickTime = 700;
+  button1.multiclickTime = 400;
   button1.longClickTime  = 1000;
   Serial.println("Starting BLE work!");
 
@@ -76,4 +76,5 @@ void rotaryEncoder(int debugEn) {
       Serial.println("3 Clicks, Previous Track");
     }
   }
+  delay(1);
 }
