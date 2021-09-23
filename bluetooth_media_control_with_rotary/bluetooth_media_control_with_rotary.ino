@@ -5,6 +5,7 @@
 #define DT 14
 #define SW 13
 #define btn 2
+#define led 4
 
 int counter = 0;
 int currentStateCLK;
@@ -13,27 +14,30 @@ String currentDir = "";
 unsigned long lastButtonPress = 0;
 
 BleKeyboard bleKeyboard("Shifter Pro", "Kaname", 69);
-ClickButton button1(SW, LOW, CLICKBTN_PULLUP);
+ClickButton rotaryBtn(SW, LOW, CLICKBTN_PULLUP);
 
 void setup() {
   Serial.begin(115200);
   pinMode(CLK, INPUT);
   pinMode(DT, INPUT);
   pinMode(SW, INPUT_PULLUP);
+  pinMode(led, OUTPUT);
   //  pinMode(btn, INPUT_PULLUP);
   //  lastStateCLK = digitalRead(CLK);
-  button1.debounceTime   = 20;
-  button1.multiclickTime = 400;
-  button1.longClickTime  = 1000;
-  Serial.println("Starting BLE work!");
-
+  rotaryBtn.debounceTime   = 20;
+  rotaryBtn.multiclickTime = 400;
+  rotaryBtn.longClickTime  = 1000;
+  Serial.println("Starting BLE work!"); 
+  digitalWrite(led, HIGH);
+  delay(50);
+  digitalWrite(led, LOW); 
   bleKeyboard.begin();
 }
 
 void loop() {
 
   if (bleKeyboard.isConnected()) {
-    button1.Update();
+    rotaryBtn.Update();
     rotaryEncoder(1);
   }
 }
@@ -43,12 +47,14 @@ void rotaryEncoder(int debugEn) {
   if (currentStateCLK != lastStateCLK  && currentStateCLK == 1) {
     if (digitalRead(DT) != currentStateCLK) {
       bleKeyboard.write(KEY_MEDIA_VOLUME_DOWN);
+      blinkOnce();
       Serial.println("volume down");
       counter --;
       currentDir = "CCW";
 
     } else {
       bleKeyboard.write(KEY_MEDIA_VOLUME_UP);
+      blinkOnce();
       Serial.println("volume up");
       counter ++;
       currentDir = "CW";
@@ -62,19 +68,29 @@ void rotaryEncoder(int debugEn) {
   }
   lastStateCLK = currentStateCLK;
 
-  if (button1.clicks != 0) {
-    if (button1.clicks == 1) {
+  if (rotaryBtn.clicks != 0) {
+    if (rotaryBtn.clicks == 1) {
       bleKeyboard.write(KEY_MEDIA_PLAY_PAUSE);
+      blinkOnce();
       Serial.println("1 Click, Play Pause");
     }
-    if (button1.clicks == 2) {
+    if (rotaryBtn.clicks == 2) {
       bleKeyboard.write(KEY_MEDIA_NEXT_TRACK);
+      blinkOnce();
       Serial.println("2 Clicks, Next Tract");
     }
-    if (button1.clicks == 3) {
+    if (rotaryBtn.clicks == 3) {
       bleKeyboard.write(KEY_MEDIA_PREVIOUS_TRACK);
+      blinkOnce();
       Serial.println("3 Clicks, Previous Track");
     }
   }
   delay(1);
+}
+
+void blinkOnce(){
+  digitalWrite(led, HIGH);
+  delay(25);
+  digitalWrite(led, LOW); 
+  delay(25);
 }
