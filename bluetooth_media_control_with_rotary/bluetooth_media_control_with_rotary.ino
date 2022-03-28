@@ -1,8 +1,8 @@
 #include <BleKeyboard.h>
 #include "ClickButton.h"
 
-#define CLK 15
-#define DT 14
+#define CLK 14
+#define DT 15
 #define SW 13
 #define btn 2
 #define led 4
@@ -77,10 +77,13 @@ void rotaryEncoder(int debugEn) {
     if (rotaryBtn.clicks == 2) {
       bleKeyboard.write(KEY_MEDIA_NEXT_TRACK);
       blinkOnce();
+      blinkOnce();
       Serial.println("2 Clicks, Next Tract");
     }
     if (rotaryBtn.clicks == 3) {
       bleKeyboard.write(KEY_MEDIA_PREVIOUS_TRACK);
+      blinkOnce();
+      blinkOnce();
       blinkOnce();
       Serial.println("3 Clicks, Previous Track");
     }
