@@ -1,9 +1,9 @@
 #include <BleKeyboard.h>
 #include "ClickButton.h"
 
-#define CLK 14
-#define DT 15
-#define SW 13
+#define CLK 15
+#define DT 13
+#define SW 0
 #define btn 2
 #define led 4
 
